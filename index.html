@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Básica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        .calculadora {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 320px;
+            width: 100%;
+        }
+
+        .pantalla {
+            width: 100%;
+            height: 60px;
+            background-color: #222;
+            color: white;
+            text-align: right;
+            font-size: 2em;
+            padding: 10px;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        .botones {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 20px;
+            background-color: #007bff;
+            color: white;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:active {
+            background-color: #0056b3;
+        }
+
+        button.operador {
+            background-color: #28a745;
+        }
+
+        button.operador:active {
+            background-color: #1e7e34;
+        }
+
+        button.limpiar {
+            background-color: #dc3545;
+        }
+
+        button.limpiar:active {
+            background-color: #c82333;
+        }
+
+        button.igual {
+            background-color: #11a390;
+            grid-column: span 2;
+        }
+
+        button.igual:active {
+            background-color: #e0a800;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculadora">
+        <div class="pantalla" id="pantalla">0</div>
+        <div class="botones">
+            <button onclick="limpiar()">C</button>
+            <button onclick="borrar()">⌫</button>
+            <button onclick="operar('/')">÷</button>
+            <button onclick="operar('*')">×</button>
+
+            <button onclick="agregarNumero('7')">7</button>
+            <button onclick="agregarNumero('8')">8</button>
+            <button onclick="agregarNumero('9')">9</button>
+            <button onclick="operar('-')">−</button>
+
+            <button onclick="agregarNumero('4')">4</button>
+            <button onclick="agregarNumero('5')">5</button>
+            <button onclick="agregarNumero('6')">6</button>
+            <button onclick="operar('+')">+</button>
+
+            <button onclick="agregarNumero('1')">1</button>
+            <button onclick="agregarNumero('2')">2</button>
+            <button onclick="agregarNumero('3')">3</button>
+            <button class="igual" onclick="calcular()">=</button>
+
+            <button onclick="agregarNumero('0')">0</button>
+            <button onclick="agregarNumero('.')">.</button>
+        </div>
+    </div>
+
+    <script>
+        let operacionActual = '';
+        let operador = '';
+        let resultadoMostrado = false;
+
+        function agregarNumero(numero) {
+            const pantalla = document.getElementById('pantalla');
+            if (pantalla.innerHTML === '0' || resultadoMostrado) {
+                pantalla.innerHTML = numero;
+                resultadoMostrado = false;
+            } else {
+                pantalla.innerHTML += numero;
+            }
+        }
+
+        function operar(op) {
+            const pantalla = document.getElementById('pantalla');
+            if (operacionActual !== '') {
+                calcular();
+            }
+            operacionActual = pantalla.innerHTML;
+            operador = op;
+            pantalla.innerHTML = '';
+        }
+
+        function calcular() {
+            const pantalla = document.getElementById('pantalla');
+            if (operacionActual === '') return;
+
+            const numeroActual = pantalla.innerHTML;
+            let resultado;
+            switch (operador) {
+                case '+':
+                    resultado = parseFloat(operacionActual) + parseFloat(numeroActual);
+                    break;
+                case '-':
+                    resultado = parseFloat(operacionActual) - parseFloat(numeroActual);
+                    break;
+                case '*':
+                    resultado = parseFloat(operacionActual) * parseFloat(numeroActual);
+                    break;
+                case '/':
+                    resultado = parseFloat(operacionActual) / parseFloat(numeroActual);
+                    break;
+                default:
+                    return;
+            }
+
+            pantalla.innerHTML = resultado;
+            operacionActual = '';
+            operador = '';5
+            resultadoMostrado = true;
+        }
+
+        function limpiar() {
+            document.getElementById('pantalla').innerHTML = '0';
+            operacionActual = '';
+            operador = '';
+        }
+
+        function borrar() {
+            const pantalla = document.getElementById('pantalla');
+            pantalla.innerHTML = pantalla.innerHTML.slice(0, -1);
+            if (pantalla.innerHTML === '') {
+                pantalla.innerHTML = '0';
+            }
+        }
+    </script>
+
+</body>
+</html>
